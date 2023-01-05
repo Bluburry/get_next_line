@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tpinto-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/09 17:41:46 by tpinto-e          #+#    #+#             */
-/*   Updated: 2023/01/04 16:29:57 by tpinto-e         ###   ########.fr       */
+/*   Created: 2023/01/04 17:34:17 by tpinto-e          #+#    #+#             */
+/*   Updated: 2023/01/04 17:34:35 by tpinto-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*append_static(char *static_string, char *append_str)
 {
@@ -103,16 +103,16 @@ char	*alter_static(char *static_string)
 
 char	*get_next_line(int fd)
 {
-	static char		*static_string;
+	static char		*static_string[FOPEN_MAX];
 	char			*str;
 
-	if (fd < 0 || BUFFER_SIZE < 1)
+	if (fd < 0 || BUFFER_SIZE < 1 || fd > FOPEN_MAX)
 		return (NULL);
-	static_string = search_newline(fd, static_string);
-	if (!static_string)
+	static_string[fd] = search_newline(fd, static_string[fd]);
+	if (!static_string[fd])
 		return (NULL);
-	str = get_string(static_string);
-	static_string = alter_static(static_string);
+	str = get_string(static_string[fd]);
+	static_string[fd] = alter_static(static_string[fd]);
 	return (str);
 }
 /*
